@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ContactManagerApp</string>
+
+    <string name="contact_name">Όνομα επαφής</string>
+    <string name="contact_phone">Τηλέφωνο</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="main_title">Contact Manager</string>
+    <string name="search_hint">Αναζήτηση ονόματος ή τηλεφώνου</string>
+    <string name="add_contact">+ Προσθήκη επαφής</string>
+</resources>
