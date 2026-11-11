@@ -23,6 +23,9 @@ class ContactAdapter(
         val phoneTextView: TextView =
             itemView.findViewById(R.id.textViewPhone)
 
+        val emailTextView: TextView =
+            itemView.findViewById(R.id.textViewEmail)
+
         val editButton: Button =
             itemView.findViewById(R.id.buttonEdit)
 
@@ -48,8 +51,14 @@ class ContactAdapter(
 
         val contact = getItem(position)
 
-        holder.nameTextView.text = contact.name
+        holder.nameTextView.text = holder.itemView.context.getString(
+            R.string.contact_full_name,
+            contact.name,
+            contact.lastName
+        )
+
         holder.phoneTextView.text = contact.phone
+        holder.emailTextView.text = contact.email
 
         holder.editButton.setOnClickListener {
             onEditClick(contact)

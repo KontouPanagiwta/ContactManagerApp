@@ -3,6 +3,7 @@ package com.example.contactmanagerapp
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -23,15 +24,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
-        // Δημιουργία βάσης δεδομένων
+        Toast.makeText(
+            this,
+            "Η MainActivity ξεκίνησε!",
+            Toast.LENGTH_LONG
+        ).show()
+
+        // Database
         val database = ContactDatabase.getDatabase(applicationContext)
 
-        // Δημιουργία Repository
+        // Repository
         val repository = ContactRepository(database.contactDao())
 
-        // Δημιουργία ViewModel
+        // ViewModel
         val factory = ContactViewModelFactory(repository)
 
         viewModel = ViewModelProvider(
@@ -56,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        // Αναζήτηση
+        // Search
         val editTextSearch = findViewById<EditText>(
             R.id.editTextSearch
         )
@@ -68,7 +76,8 @@ class MainActivity : AppCompatActivity() {
                 start: Int,
                 count: Int,
                 after: Int
-            ) {}
+            ) {
+            }
 
             override fun onTextChanged(
                 s: CharSequence?,
@@ -79,10 +88,11 @@ class MainActivity : AppCompatActivity() {
                 viewModel.updateSearchQuery(s.toString())
             }
 
-            override fun afterTextChanged(s: Editable?) {}
+            override fun afterTextChanged(s: Editable?) {
+            }
         })
 
-        // Κουμπί προσθήκης
+        // Add Contact Button
         val buttonAddContact = findViewById<Button>(
             R.id.buttonAddContact
         )
@@ -91,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             showContactDialog()
         }
 
-        // Παρακολούθηση λίστας επαφών
+        // Observe Contacts
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contacts.collect { contacts ->
@@ -101,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Προσθήκη ή επεξεργασία επαφής
+    // Add / Edit Contact
     private fun showContactDialog(contact: Contact? = null) {
 
         val dialogView = layoutInflater.inflate(
@@ -113,13 +123,24 @@ class MainActivity : AppCompatActivity() {
             R.id.editTextName
         )
 
+        val editTextLastName = dialogView.findViewById<EditText>(
+            R.id.editTextLastName
+        )
+
         val editTextPhone = dialogView.findViewById<EditText>(
             R.id.editTextPhone
         )
 
+        val editTextEmail = dialogView.findViewById<EditText>(
+            R.id.editTextEmail
+        )
+
+        // Fill fields when editing
         if (contact != null) {
             editTextName.setText(contact.name)
+            editTextLastName.setText(contact.lastName)
             editTextPhone.setText(contact.phone)
+            editTextEmail.setText(contact.email)
         }
 
         val dialog = AlertDialog.Builder(this)
@@ -141,13 +162,31 @@ class MainActivity : AppCompatActivity() {
                 .setOnClickListener {
 
                     val name = editTextName.text.toString().trim()
+                    val lastName = editTextLastName.text.toString().trim()
                     val phone = editTextPhone.text.toString().trim()
+                    val email = editTextEmail.text.toString().trim()
 
-                    if (name.isEmpty() || phone.isEmpty()) {
+                    // Validation
+                    if (
+                        name.isEmpty() ||
+                        lastName.isEmpty() ||
+                        phone.isEmpty()
+                    ) {
 
                         Toast.makeText(
                             this,
-                            "Συμπλήρωσε όνομα και τηλέφωνο",
+                            "Συμπλήρωσε όνομα, επώνυμο και τηλέφωνο",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                    } else if (
+                        email.isNotEmpty() &&
+                        !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                    ) {
+
+                        Toast.makeText(
+                            this,
+                            "Συμπλήρωσε έγκυρο email",
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -155,19 +194,25 @@ class MainActivity : AppCompatActivity() {
 
                         if (contact == null) {
 
+                            // Insert Contact
                             viewModel.insertContact(
                                 Contact(
                                     name = name,
-                                    phone = phone
+                                    lastName = lastName,
+                                    phone = phone,
+                                    email = email
                                 )
                             )
 
                         } else {
 
+                            // Update Contact
                             viewModel.updateContact(
                                 contact.copy(
                                     name = name,
-                                    phone = phone
+                                    lastName = lastName,
+                                    phone = phone,
+                                    email = email
                                 )
                             )
                         }
@@ -180,13 +225,14 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    // Διαγραφή επαφής
+    // Delete Contact
     private fun deleteContact(contact: Contact) {
 
         AlertDialog.Builder(this)
             .setTitle("Διαγραφή επαφής")
             .setMessage(
-                "Θέλεις σίγουρα να διαγράψεις την επαφή ${contact.name};"
+                "Θέλεις σίγουρα να διαγράψεις την επαφή " +
+                        "${contact.name} ${contact.lastName};"
             )
             .setPositiveButton("Ναι") { _, _ ->
                 viewModel.deleteContact(contact)

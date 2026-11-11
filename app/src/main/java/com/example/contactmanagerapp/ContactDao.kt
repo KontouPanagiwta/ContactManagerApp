@@ -11,23 +11,29 @@ import kotlinx.coroutines.flow.Flow
 interface ContactDao {
 
     // Εμφάνιση όλων των επαφών με αλφαβητική σειρά
-    @Query("SELECT * FROM contacts ORDER BY name COLLATE NOCASE ASC")
+    @Query("""
+        SELECT * FROM contacts
+        ORDER BY name COLLATE NOCASE ASC,
+        lastName COLLATE NOCASE ASC
+    """)
     fun getAllContacts(): Flow<List<Contact>>
 
-    // Αναζήτηση επαφών με βάση το όνομα ή το τηλέφωνο
+    // Αναζήτηση με όνομα, επώνυμο ή τηλέφωνο
     @Query("""
         SELECT * FROM contacts
         WHERE name LIKE '%' || :searchQuery || '%'
+        OR lastName LIKE '%' || :searchQuery || '%'
         OR phone LIKE '%' || :searchQuery || '%'
-        ORDER BY name COLLATE NOCASE ASC
+        ORDER BY name COLLATE NOCASE ASC,
+        lastName COLLATE NOCASE ASC
     """)
     fun searchContacts(searchQuery: String): Flow<List<Contact>>
 
-    // Προσθήκη νέας επαφής
+    // Προσθήκη επαφής
     @Insert
     suspend fun insertContact(contact: Contact)
 
-    // Ενημέρωση υπάρχουσας επαφής
+    // Ενημέρωση επαφής
     @Update
     suspend fun updateContact(contact: Contact)
 

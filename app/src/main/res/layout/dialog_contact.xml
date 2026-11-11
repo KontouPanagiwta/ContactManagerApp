@@ -7,10 +7,9 @@
     android:orientation="vertical"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    android:paddingTop="32dp"
+    android:paddingTop="24dp"
     android:paddingBottom="24dp">
 
-    <!-- Πεδίο ονόματος -->
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="280dp"
@@ -18,27 +17,52 @@
         android:layout_gravity="center"
         android:hint="@string/contact_name"
         android:inputType="textPersonName"
-        android:autofillHints="name"
+        android:autofillHints="given-name"
         android:textColor="#000000"
         android:textColorHint="#555555"
         android:backgroundTint="#555555"
-        android:padding="12dp"
-        android:minHeight="56dp" />
+        android:padding="12dp" />
 
-    <!-- Πεδίο τηλεφώνου -->
+    <EditText
+        android:id="@+id/editTextLastName"
+        android:layout_width="280dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:hint="@string/contact_last_name"
+        android:inputType="textPersonName"
+        android:autofillHints="family-name"
+        android:textColor="#000000"
+        android:textColorHint="#555555"
+        android:backgroundTint="#555555"
+        android:padding="12dp" />
+
     <EditText
         android:id="@+id/editTextPhone"
         android:layout_width="280dp"
         android:layout_height="56dp"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:hint="@string/contact_phone"
         android:inputType="phone"
         android:autofillHints="phone"
         android:textColor="#000000"
         android:textColorHint="#555555"
         android:backgroundTint="#555555"
-        android:padding="12dp"
-        android:minHeight="56dp" />
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="280dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:hint="@string/contact_email"
+        android:inputType="textEmailAddress"
+        android:autofillHints="email"
+        android:textColor="#000000"
+        android:textColorHint="#555555"
+        android:backgroundTint="#555555"
+        android:padding="12dp" />
 
 </LinearLayout>

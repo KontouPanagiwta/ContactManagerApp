@@ -4,43 +4,61 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:padding="12dp">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_margin="8dp"
+    android:background="#F2F2F2">
+
+    <TextView
+        android:id="@+id/textViewName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_name"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:paddingBottom="6dp" />
+
+    <TextView
+        android:id="@+id/textViewPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contact_phone"
+        android:textSize="16sp"
+        android:textColor="#333333" />
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:paddingBottom="8dp" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:gravity="end">
 
-        <TextView
-            android:id="@+id/textViewName"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/buttonEdit"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/contact_name"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:text="@string/edit"
+            android:textColor="#000000"
+            android:backgroundTint="#E0E0E0" />
 
-        <TextView
-            android:id="@+id/textViewPhone"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/buttonDelete"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/contact_phone"
-            android:textSize="16sp" />
+            android:text="@string/delete"
+            android:textColor="#000000"
+            android:backgroundTint="#E0E0E0" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit" />
-
-    <Button
-        android:id="@+id/buttonDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/delete" />
 
 </LinearLayout>
